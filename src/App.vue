@@ -1,75 +1,65 @@
-<script setup lang="ts">
-</script>
-
 <template>
-  <n-card title="卡片插槽示例">
-    <template #header-extra>
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-      #header-extra
-    </template>
-    卡片内容
-    <template #footer>
-      #footer
-    </template>
-    <template #action>
-      #action
-    </template>
-  </n-card>
+  <n-space vertical :size="12">
+    <n-space>
+      <n-button @click="downloadCsv">
+        导出 CSV（原始数据）
+      </n-button>
+    </n-space>
+    <n-data-table
+      ref="tableRef"
+      :columns="columns"
+      :data="data"
+      :pagination="pagination"
+      :bordered="false"
+    />
+  </n-space>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
+<script setup lang="ts">
+import type {
+  DataTableColumns,
+  DataTableInst,
+  DataTableRowData
+} from 'naive-ui'
+import { ref } from 'vue'
+
+interface Song {
+  key: number
+  name: string
+  age: number
+  address: string
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+const columns: DataTableColumns<DataTableRowData> = [
+  {
+    title: 'Name',
+    key: 'name',
+    sorter: 'default',
+  },
+  {
+    title: 'Age',
+    key: 'age',
+  },
+  {
+    title: 'Address',
+    key: 'address',
+  }
+]
+
+const data: Song[] = [
+  {
+    key: 1,
+    name: 'Jim Green',
+    age: 28,
+    address: '11111111111111111111 \r\n 222222222222222222222'
+  },
+]
+
+const tableRef = ref<DataTableInst>()
+
+function downloadCsv() {
+  return tableRef.value?.downloadCsv({ fileName: 'data-table' })
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
+const pagination = false as const
+</script>
